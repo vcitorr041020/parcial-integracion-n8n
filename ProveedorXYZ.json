@@ -1,0 +1,827 @@
+{
+  "name": "ProveedorXYZ",
+  "nodes": [
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ],
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -112,
+        208
+      ],
+      "id": "ccb0e760-fabe-4683-a41b-910489cab8b1",
+      "name": "Telegram Trigger",
+      "webhookId": "f466950b-bceb-4b54-abed-d05e54d6d351",
+      "credentials": {
+        "telegramApi": {
+          "id": "K7ANxZhrD8xnuvyO",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1kpgsTuGu_fvDe46PNLnnjBle2BVljcMgckMtDa670u0",
+          "mode": "list",
+          "cachedResultName": "Proveedor",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1kpgsTuGu_fvDe46PNLnnjBle2BVljcMgckMtDa670u0/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Productos",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1kpgsTuGu_fvDe46PNLnnjBle2BVljcMgckMtDa670u0/edit#gid=0"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "producto_id",
+              "lookupValue": "={{ $json.producto_id }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        432,
+        48
+      ],
+      "id": "078c376b-c1d2-4572-bc0c-50b6101a14aa",
+      "name": "Productos",
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "b3lXAR2NDYouixLS",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1kpgsTuGu_fvDe46PNLnnjBle2BVljcMgckMtDa670u0",
+          "mode": "list",
+          "cachedResultName": "Proveedor",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1kpgsTuGu_fvDe46PNLnnjBle2BVljcMgckMtDa670u0/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1214210256,
+          "mode": "list",
+          "cachedResultName": "Clientes",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1kpgsTuGu_fvDe46PNLnnjBle2BVljcMgckMtDa670u0/edit#gid=1214210256"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "cliente_id",
+              "lookupValue": "={{$json.cliente_id}}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        432,
+        208
+      ],
+      "id": "13713fcd-a17b-4aa9-8f1e-7de0086a5c2a",
+      "name": "Clientes",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "b3lXAR2NDYouixLS",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1kpgsTuGu_fvDe46PNLnnjBle2BVljcMgckMtDa670u0",
+          "mode": "list",
+          "cachedResultName": "Proveedor",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1kpgsTuGu_fvDe46PNLnnjBle2BVljcMgckMtDa670u0/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 925204481,
+          "mode": "list",
+          "cachedResultName": "Empresa",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1kpgsTuGu_fvDe46PNLnnjBle2BVljcMgckMtDa670u0/edit#gid=925204481"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "empresa",
+              "lookupValue": "={{ $json.empresa }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        432,
+        384
+      ],
+      "id": "c1307279-afc5-444b-848c-cf55c853fb6e",
+      "name": "Empresa",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "b3lXAR2NDYouixLS",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const stock_actual = $input.first().json.StockActual;\nconst cantidad = $('Parseo').first().json.cantidad;\nconst stock_nuevo = stock_actual - cantidad;\n\nreturn [{\n  json: {\n    producto_id: $input.first().json.producto_id,\n    nombre_producto: $input.first().json.nombre_producto,\n    cantidad,\n    stock_actual_viejo: stock_actual,\n    stock_actual_nuevo: stock_nuevo,\n    stock_minimo:$('Productos').first().json.stock_minimo,\n    nombre_cliente: $input.first().json.nombre_cliente,\n    apellido: $input.first().json.apellido,\n    correo: $input.first().json.correo,\n    empresa: $input.first().json.empresa,\n    slack_despachos: $input.first().json.slack_despachos,\n    slack_alertas: $input.first().json.slack_alertas,\n    prioridad: $input.first().json.prioridad\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1344,
+        80
+      ],
+      "id": "3a63f197-378e-4ffe-879b-0606634a2ea3",
+      "name": "Code in JavaScript1"
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "select": "channel",
+        "channelId": {
+          "__rl": true,
+          "value": "C09F9UBUC2G",
+          "mode": "list",
+          "cachedResultName": "despachos"
+        },
+        "text": "=✅ Pedido despachado\n📦 Producto: {{ $json.producto_id }} – {{ $json['nombre_producto   '] }}\n👤 Cliente: {{ $('Condicional IF').item.json.NombreCliente }} {{ $('Condicional IF').item.json.Apellido }} ({{ $('Condicional IF').item.json.ClienteID }}) \n📅 Prioridad: {{ $('Parseo').item.json.prioridad }}\n🔢 Cantidad: {{ $('Parseo').item.json.cantidad }}\n📉 Stock restante: {{ $('Code in JavaScript1').item.json.stock_actual_nuevo }}",
+        "otherOptions": {}
+      },
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.3,
+      "position": [
+        1760,
+        80
+      ],
+      "id": "45407390-131e-46ab-bd79-5c7de8005a85",
+      "name": "Send a message",
+      "webhookId": "4bf226d0-19ae-4375-b989-0a65111017f0",
+      "credentials": {
+        "slackOAuth2Api": {
+          "id": "FWmz3rchEQZ30B7Z",
+          "name": "Slack account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Condicional IF').item.json.Correo }}",
+        "subject": "=Pedido {{ $('Condicional IF').item.json.ProductoID }} Despachado para {{ $('Condicional IF').item.json.NombreCliente }} {{ $('Condicional IF').item.json.Apellido }} - {{ $('Condicional IF').item.json.Empresa }}",
+        "message": "=<h2>Estimado/a {{ $('Condicional IF').item.json.NombreCliente }} {{ $('Condicional IF').item.json.Apellido }},</h2> <p>Su pedido de <b> {{ $('Code in JavaScript1').item.json.cantidad }} {{ $('Condicional IF').item.json.NombreProducto }}</b> ha sido despachado exitosamente.</p> <p>Gracias por confiar en nosotros.</p> <br> <p>Atentamente,<br>{{ $('Condicional IF').item.json.Empresa }}</p> <p>Contacto: {{ $('Condicional IF').item.json.CorreoContacto }} </p>",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        1968,
+        80
+      ],
+      "id": "39a273f3-baef-4d5d-b940-6322912af5f0",
+      "name": "Send a message1",
+      "webhookId": "97bc317f-8743-455d-8cb3-a384606b799c",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "izW1MgPA15fnaVmQ",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "2894963d-3d13-4edf-9075-d838b65c02a3",
+              "leftValue": "={{ $('Code in JavaScript1').item.json.stock_actual_nuevo }}",
+              "rightValue": "={{ $('Code in JavaScript1').item.json.stock_minimo }}",
+              "operator": {
+                "type": "number",
+                "operation": "lte"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        2176,
+        80
+      ],
+      "id": "a5040bdf-d003-4d89-b2a0-d0841bbd3787",
+      "name": "If1"
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "select": "channel",
+        "channelId": {
+          "__rl": true,
+          "value": "C09FY887ED6",
+          "mode": "list",
+          "cachedResultName": "alerta-reabastecimiento"
+        },
+        "text": "=⚠ Atención Logística {{ $('Condicional IF').item.json.ProductoID }} - {{ $('Condicional IF').item.json.NombreProducto }} alcanzó su nivel mínimo de inventario (stock actual: {{ $('Code in JavaScript1').item.json.stock_actual_nuevo }}, mínimo: {{ $('Code in JavaScript1').item.json.stock_minimo }}.   Favor gestionar reabastecimiento.",
+        "otherOptions": {}
+      },
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.3,
+      "position": [
+        2448,
+        -16
+      ],
+      "id": "97c7cc12-36c1-4508-ac22-703f4588ba72",
+      "name": "Send a message2",
+      "webhookId": "265629fe-8303-40cf-a87b-90f8bfef808e",
+      "credentials": {
+        "slackOAuth2Api": {
+          "id": "FWmz3rchEQZ30B7Z",
+          "name": "Slack account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "select": "channel",
+        "channelId": {
+          "__rl": true,
+          "value": "C09F1ULPT35",
+          "mode": "list",
+          "cachedResultName": "inventario"
+        },
+        "text": "=No hay suficiente inventario para despachar el producto:  {{ $('Normalización').item.json.ProductoID }} - {{ $('Normalización').item.json.NombreProducto }}. Por favor, gestionar reabastecimiento.",
+        "otherOptions": {}
+      },
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.3,
+      "position": [
+        1344,
+        256
+      ],
+      "id": "bfb41821-8d96-4966-8e5f-f416b1b6dfb4",
+      "name": "Send a message3",
+      "webhookId": "bbf85f5a-0cd9-4639-a319-8b396e0e3c07",
+      "credentials": {
+        "slackOAuth2Api": {
+          "id": "FWmz3rchEQZ30B7Z",
+          "name": "Slack account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Normalización').item.json.Correo }}",
+        "subject": "=Producto:  {{ $('Normalización').item.json.NombreProducto }} con stock insuficiente.",
+        "message": "=<h2>Estimado/a {{ $('Normalización').item.json.NombreCliente }} {{ $('Normalización').item.json.Apellido }},</h2> <p>Lamentamos informarle que el producto <b>{{ $('Normalización').item.json.NombreProducto }}</b> no cuenta con inventario suficiente para atender su pedido.</p> <p>Nuestro equipo logístico ya fue notificado para reabastecer el stock.</p> <br> <p>Atentamente,<br>{{ $('Normalización').item.json.Empresa }}</p> <p>Contacto: {{ $('Normalización').item.json.CorreoContacto }}</p>",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        1552,
+        256
+      ],
+      "id": "6acef652-dc90-4e3c-9e21-7e0f9a1ea7b0",
+      "name": "Send a message4",
+      "webhookId": "4467d7ba-9c41-4adc-a7a1-6c9c963cdf8d",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "izW1MgPA15fnaVmQ",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "select": "channel",
+        "channelId": {
+          "__rl": true,
+          "value": "C09FY887ED6",
+          "mode": "list",
+          "cachedResultName": "alerta-reabastecimiento"
+        },
+        "text": "=⚠ Atención Logística {{ $('Condicional IF').item.json.ProductoID }} - {{ $('Condicional IF').item.json.NombreProducto }} no hay suficiente inventario para despacharlo. El cliente {{ $('Normalización').item.json.NombreCliente }} {{ $('Normalización').item.json.Apellido }} ha sido notificado por correo electronico de la eventualidad. Por favor, gestionar el abastecimiento.",
+        "otherOptions": {}
+      },
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.3,
+      "position": [
+        1760,
+        256
+      ],
+      "id": "85c2a2ef-d6f7-467f-90f6-90a05fdd38b2",
+      "name": "Send a message5",
+      "webhookId": "c64797a7-e3d1-4045-9594-0c7944ad1460",
+      "credentials": {
+        "slackOAuth2Api": {
+          "id": "FWmz3rchEQZ30B7Z",
+          "name": "Slack account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Captura el texto del mensaje recibido en Telegram\nconst text = $json[\"message\"][\"text\"];\n\n// Divide por el delimitador \"|\"\nconst parts = text.split(\"|\").map(p => p.trim());\n\n// Retorna los valores ya organizados\nreturn [\n  {\n    json: {\n      producto_id: parts[1],\n      cliente_id: parts[2],\n      prioridad: parts[3],\n      cantidad: parseInt(parts[4]),\n      empresa: parts[5]\n    }\n  }\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        192,
+        208
+      ],
+      "id": "f5ccb7b7-7ed2-4271-9f4f-26936efce01e",
+      "name": "Parseo"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "numberInputs": 3,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        752,
+        192
+      ],
+      "id": "9fe7096d-3e88-4c0e-b053-4513174d08c0",
+      "name": "Unión"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "1f0adaf8-2378-4b75-b68c-fe2c0e366e0c",
+              "name": "ProductoID",
+              "value": "={{ $json.producto_id }}",
+              "type": "string"
+            },
+            {
+              "id": "e019b544-39d4-4d2f-8e60-0df73714a89d",
+              "name": "NombreProducto",
+              "value": "={{ $json['nombre_producto   '] }}",
+              "type": "string"
+            },
+            {
+              "id": "1ce4acf4-7f94-495b-8d9b-f25648ef3319",
+              "name": "StockActual",
+              "value": "={{ $json['stock_actual '] }}",
+              "type": "number"
+            },
+            {
+              "id": "ff606a62-4718-4e09-b102-4a5f3067950d",
+              "name": "StockMinimo",
+              "value": "={{ $json.stock_minimo }}",
+              "type": "number"
+            },
+            {
+              "id": "23e386bc-3041-42ef-b068-4d2c804c278c",
+              "name": "ClienteID",
+              "value": "={{ $json.cliente_id }}",
+              "type": "string"
+            },
+            {
+              "id": "6ff1088d-3dd9-4e9a-9518-6bef51cfec9b",
+              "name": "NombreCliente",
+              "value": "={{ $json.nombre_cliente }}",
+              "type": "string"
+            },
+            {
+              "id": "cb47b53a-07e7-4b10-8d67-aa5b6423ac47",
+              "name": "Apellido",
+              "value": "={{ $json['apellido '] }}",
+              "type": "string"
+            },
+            {
+              "id": "3174d156-c805-4b20-8b99-1a9665a3b996",
+              "name": "Correo",
+              "value": "={{ $json.correo }}",
+              "type": "string"
+            },
+            {
+              "id": "56f079c9-381e-42ef-94e4-cbf98f631cca",
+              "name": "Empresa",
+              "value": "={{ $json.empresa }}",
+              "type": "string"
+            },
+            {
+              "id": "ce534430-b12b-4e14-9be0-045288a5230d",
+              "name": "CorreoContacto",
+              "value": "={{ $json['correo_contacto           '] }}",
+              "type": "string"
+            },
+            {
+              "id": "b9256a6e-34e0-4dfe-a513-92942bc343c5",
+              "name": "Despachos",
+              "value": "={{ $json.slack_alertas }}",
+              "type": "string"
+            },
+            {
+              "id": "c20cb7a4-cc81-419b-9f10-a8867c534aef",
+              "name": "Alertas",
+              "value": "={{ $json.slack_alertas }}",
+              "type": "string"
+            },
+            {
+              "id": "c1bf63b6-e7d3-417e-bd8e-355297d067fd",
+              "name": "Empresa",
+              "value": "={{ $json.empresa }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        944,
+        208
+      ],
+      "id": "50955d38-a787-4a27-abcb-a8345d16b6a6",
+      "name": "Normalización"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "c3e8e60d-def1-46a6-9b77-6e97dae547fc",
+              "leftValue": "={{ $json.StockActual }}",
+              "rightValue": "={{ $('Parseo').item.json.cantidad }}",
+              "operator": {
+                "type": "number",
+                "operation": "gte"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1136,
+        208
+      ],
+      "id": "7146049a-d42f-48f8-8a70-0ae526f4a690",
+      "name": "Condicional IF"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1kpgsTuGu_fvDe46PNLnnjBle2BVljcMgckMtDa670u0",
+          "mode": "list",
+          "cachedResultName": "Proveedor",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1kpgsTuGu_fvDe46PNLnnjBle2BVljcMgckMtDa670u0/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Productos",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1kpgsTuGu_fvDe46PNLnnjBle2BVljcMgckMtDa670u0/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "producto_id": "={{ $('Condicional IF').item.json.ProductoID }}",
+            "nombre_producto   ": "={{ $('Condicional IF').item.json.NombreProducto }}",
+            "stock_actual ": "={{ $json.stock_actual_nuevo }}",
+            "stock_minimo": "={{ $json.stock_minimo }}"
+          },
+          "matchingColumns": [
+            "producto_id"
+          ],
+          "schema": [
+            {
+              "id": "producto_id",
+              "displayName": "producto_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "nombre_producto   ",
+              "displayName": "nombre_producto   ",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "stock_actual ",
+              "displayName": "stock_actual ",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "stock_minimo",
+              "displayName": "stock_minimo",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1552,
+        80
+      ],
+      "id": "42909b83-79a8-4225-a084-5316c54a1172",
+      "name": "Actualizar Sheets",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "b3lXAR2NDYouixLS",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "PRESENTADO POR: VICTOR ROCHA - JAIR SANCHEZ",
+        "height": 80,
+        "width": 384,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        736,
+        432
+      ],
+      "typeVersion": 1,
+      "id": "bd84d9b4-98f4-4717-b7c1-6f2732f7c738",
+      "name": "Sticky Note"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Telegram Trigger": {
+      "main": [
+        [
+          {
+            "node": "Parseo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Clientes": {
+      "main": [
+        [
+          {
+            "node": "Unión",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Empresa": {
+      "main": [
+        [
+          {
+            "node": "Unión",
+            "type": "main",
+            "index": 2
+          }
+        ]
+      ]
+    },
+    "Productos": {
+      "main": [
+        [
+          {
+            "node": "Unión",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript1": {
+      "main": [
+        [
+          {
+            "node": "Actualizar Sheets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a message": {
+      "main": [
+        [
+          {
+            "node": "Send a message1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a message1": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "Send a message2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a message3": {
+      "main": [
+        [
+          {
+            "node": "Send a message4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a message4": {
+      "main": [
+        [
+          {
+            "node": "Send a message5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parseo": {
+      "main": [
+        [
+          {
+            "node": "Clientes",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Productos",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Empresa",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Unión": {
+      "main": [
+        [
+          {
+            "node": "Normalización",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalización": {
+      "main": [
+        [
+          {
+            "node": "Condicional IF",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Condicional IF": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send a message3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Actualizar Sheets": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "ed2be7f2-8874-4911-830b-04ca3f3ae401",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "580857efdf912605362d7cbbf35ffacc565a8dfff03308c8125334db2b8b8392"
+  },
+  "id": "C5HoY8TwoOxERG6h",
+  "tags": []
+}
